@@ -1,0 +1,6 @@
+﻿# 文章标题
+{{ object.title }}
+# 文章作者
+{{object.author}}
+# 文章内容
+{{ object.body_to_markdown }}

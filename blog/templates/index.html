@@ -1,0 +1,90 @@
+{%extends 'base_right.html'%}
+{%load blog_tags static%}
+{%load staticfiles%}
+
+{% block title %}阿K | Mr.TKK的个人博客{% endblock %}
+{% block body %}
+    <!-- slides左边幻灯片 -->
+    
+    <div class="content-wrap">
+        <div class="content">
+            <div id="wowslider-container1">
+                <!-- 大图片 -->
+                <div class="ws_images">
+                    <ul>
+                        {% get_slides_list_left as slides %}
+                        {% for s in slides %}
+                        <li>
+                            <a target="_blank" href="{{ s.url }}" title="{{ s.title }}">
+                                <img src="{{ s.img_url }}" title="{{ s.title }}" alt="{{ s.title }}"/>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!-- 左侧小图片 -->
+                <div class="ws_thumbs">
+                    <div>
+                        {% get_slides_list_left as slides %}
+                        {% for s in slides %}
+                        <a target="_blank" href="#" title="{{ s.title }}"><img src="{{ s.img_url }}"/></a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="ws_shadow"></div>
+            </div>
+        
+    
+    <script type="text/javascript" src="/static/js/slider.js"></script>
+
+    <!-- 热门排行 -->
+    <div>
+        <div class="left-ad" style="clear: both;background-color: #fff; width: 30%;float: left;margin-right:2%;"></div>
+        <div class="hot-posts">
+            <h2 class="title">热门排行</h2>
+            <ul>
+                {% get_article_list 'visitors' 5 as hot_article %}
+                    {% for hot in hot_article %}
+                    <li>
+                        <p><span class="muted">
+                            <a href="javascript:;" data-action="ding" data-id="{{ hot.id }}" id="Addlike" class="action">
+                                <i class="fa fa-heart-o"></i><span class="count">{{ hot.like }}</span> 喜欢</a>
+                            </span>
+                        </p>
+                        <span class="label label-1">{{ forloop.counter}}</span>
+                        <a href="/article/{{ hot.id }}" title="{{ hot.title }}">{{ hot.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- 文章 -->
+    {% for article in page_obj %}
+            <article class="excerpt">
+                <header><a class="label label-important" href="/category/{{ article.category.blog_type.description }}/{{ article.category.name|lower }}">{{ article.category.name }}<i class="label-arrow"></i></a>
+                    <h2><a target="_blank" href="/article/{{ article.id }}" title="{{ article.title }}">{{ article.title }} </a></h2>
+                </header>
+                <div class="focus">
+                    <a target="_blank" href="{{ article.get_absolute_url }}">
+                        <img class="thumb" width="200" height="123" src="{{ article.img_link }}" alt="{{ article.title }}"/>
+                    </a>
+                </div>
+                <span class="note">{{ article.summary }}</span>
+                <p class="auth-span">
+                    
+                    <span class="muted"><i class="fa fa-clock-o"></i> {{ article.pub_date|date:'Y-m-d' }}</span>
+                    <span class="muted"><i class="fa fa-eye"></i> {{ article.visitors }}浏览</span>
+                   
+                    <span class="muted"><a href="javascript:;" data-action="ding" data-id="{{ article.id }}" id="Addlike" class="action">
+                        <i class="fa fa-heart-o"></i><span class="count">{{ article.like }}</span>喜欢</a>
+                    </span>
+                </p>
+            </article>
+        {% empty %}
+            <div class="no-post">暂时还没有发布的文章！</div>
+        {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
